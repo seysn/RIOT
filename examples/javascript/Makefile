@@ -34,9 +34,8 @@ endif
 # Add the package for Jerryscript
 USEPKG += jerryscript
 
-<<<<<<< HEAD
+
 include $(RIOTBASE)/Makefile.include
-=======
 USEMODULE += js
 USEMODULE += shell_commands
 
@@ -49,8 +48,6 @@ USEMODULE += gnrc_icmpv6_echo
 USEMODULE += gcoap
 USEMODULE += sock_util
 
-include $(CURDIR)/../../Makefile.include
->>>>>>> 399b56782... Commit antho
 
 JS_PATH := $(BINDIR)/js/$(MODULE)
 # add directory of generated *.js.h files to include path
