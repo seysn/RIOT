@@ -28,13 +28,13 @@ ifneq ($(BOARD),native)
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=9092
 endif
 
-USEPKG += jerryscript
 
 USEMODULE += shell_commands
-USEMODULE += core_thread_flags
+USEMODULE += js
 
 
 include $(CURDIR)/../../Makefile.include
+
 
 JS_PATH := $(BINDIR)/js/$(MODULE)
 # add directory of generated *.js.h files to include path

@@ -128,7 +128,7 @@ int js_run(const jerry_char_t *script, size_t script_size)
     jerry_value_t ret_value;
 
     /* Setup Global scope code */
-    ret_value = jerry_parse(script, script_size, false);
+    ret_value = jerry_parse(NULL, 0, script, script_size, JERRY_PARSE_NO_OPTS);
 
     if (!jerry_value_is_error(ret_value)) {
         /* Execute the parsed source code in the Global scope */

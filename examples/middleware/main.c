@@ -23,8 +23,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "jerryscript.h"
-
 #include "js.h"
 
 /* include headers generated from *.js */
