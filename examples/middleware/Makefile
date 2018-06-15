@@ -4,6 +4,8 @@ APPLICATION = riot_javascript
 # default BOARD environment
 BOARD ?= native
 
+RIOTBASE ?= $(CURDIR)/../..
+
 BOARD_INSUFFICIENT_MEMORY := airfy-beacon b-l072z-lrwan1 calliope-mini \
                              cc2650-launchpad cc2650stk maple-mini \
                              microbit nrf51dongle nrf6310 nucleo-f030 nucleo-f070 \
@@ -19,25 +21,18 @@ BOARD_BLACKLIST := arduino-duemilanove arduino-mega2560 arduino-uno chronos \
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
-CFLAGS += -DDEVELHELP
+DEVELHELP ?= 1
 
+ifneq ($(BOARD),native)
 # Set stack size to something (conservatively) enormous
-CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096 -g -DGCOAP_STACK_SIZE=2560
-export JERRYHEAP=7
+CFLAGS += -DTHREAD_STACKSIZE_MAIN=9092
+endif
 
-USEMODULE += js
+USEPKG += jerryscript
+
 USEMODULE += shell_commands
+USEMODULE += core_thread_flags
 
-USEMODULE += gnrc_netdev_default
-USEMODULE += auto_init_gnrc_netif
-# Specify the mandatory networking modules for IPv6 and UDP
-USEMODULE += gnrc_ipv6_router_default
-# Additional networking modules that can be dropped if not needed
-USEMODULE += gnrc_icmpv6_echo
-USEMODULE += gcoap
-USEMODULE += sock_util
-
-CFLAGS += -DGCOAP_PDU_BUF_SIZE=1280 -DGNRC_PKTBUF_SIZE=2048
 
 include $(CURDIR)/../../Makefile.include
 

@@ -108,7 +108,7 @@ void js_call_function(jerry_value_t function)
         jerry_value_t this_val = jerry_create_undefined();
         jerry_value_t ret_val = jerry_call_function(function, this_val, NULL, 0);
 
-        if (!jerry_value_has_error_flag(ret_val)) {
+        if (!jerry_value_is_error(ret_val)) {
             DEBUG("%s():l%u %s\n", __FILE__, __LINE__, __func__);
         }
         else {
@@ -130,14 +130,14 @@ int js_run(const jerry_char_t *script, size_t script_size)
     /* Setup Global scope code */
     ret_value = jerry_parse(script, script_size, false);
 
-    if (!jerry_value_has_error_flag(ret_value)) {
+    if (!jerry_value_is_error(ret_value)) {
         /* Execute the parsed source code in the Global scope */
         ret_value = jerry_run(ret_value);
     }
 
     int res = 0;
 
-    if (jerry_value_has_error_flag(ret_value)) {
+    if (jerry_value_is_error(ret_value)) {
         puts("js_run(): Script Error!");
         res = -1;
     }
@@ -175,7 +175,7 @@ static void js_shutdown_event_handler(event_t *event)
     while ((ref = (js_native_ref_t*) clist_lpop(&js_native_refs))) {
         jerry_release_value(ref->object);
     }
-    
+
     /* cleanup jerryscript engine */
     if(js_needs_cleanup) {
         jerry_cleanup();

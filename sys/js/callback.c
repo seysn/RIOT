@@ -45,4 +45,3 @@ void js_callback_cancel(js_callback_t *js_callback)
     event_cancel(js_event_queue, &js_callback->event);
     js_callback_cleanup(js_callback);
 }
-
