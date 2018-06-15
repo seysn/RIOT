@@ -34,20 +34,7 @@ endif
 # Add the package for Jerryscript
 USEPKG += jerryscript
 
-
 include $(RIOTBASE)/Makefile.include
-USEMODULE += js
-USEMODULE += shell_commands
-
-USEMODULE += gnrc_netdev_default
-USEMODULE += auto_init_gnrc_netif
-# Specify the mandatory networking modules for IPv6 and UDP
-USEMODULE += gnrc_ipv6_router_default
-# Additional networking modules that can be dropped if not needed
-USEMODULE += gnrc_icmpv6_echo
-USEMODULE += gcoap
-USEMODULE += sock_util
-
 
 JS_PATH := $(BINDIR)/js/$(MODULE)
 # add directory of generated *.js.h files to include path
