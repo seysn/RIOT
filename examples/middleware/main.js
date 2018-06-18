@@ -8,5 +8,3 @@
  */
 
 print("IoT-Lab-M3 RIOT javascript demo");
-print("Reseting the app");
-riot.reboot();

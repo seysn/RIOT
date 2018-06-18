@@ -23,14 +23,25 @@ BOARD_BLACKLIST := arduino-duemilanove arduino-mega2560 arduino-uno chronos \
 # development process:
 DEVELHELP ?= 1
 
+USEMODULE += js
+USEMODULE += shell_commands
+USEMODULE += posix
+
+USEMODULE += gnrc_netdev_default
+USEMODULE += auto_init_gnrc_netif
+# Specify the mandatory networking modules for IPv6 and UDP
+USEMODULE += gnrc_ipv6_router_default
+# Additional networking modules that can be dropped if not needed
+USEMODULE += gnrc_icmpv6_echo
+USEMODULE += gcoap
+USEMODULE += sock_util
+
+
+
 ifneq ($(BOARD),native)
 # Set stack size to something (conservatively) enormous
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=9092
 endif
-
-
-USEMODULE += shell_commands
-USEMODULE += js
 
 
 include $(CURDIR)/../../Makefile.include
