@@ -749,6 +749,16 @@ ifneq (,$(filter uuid,$(USEMODULE)))
   USEMODULE += random
 endif
 
+# ajout pour les dépendances de js
+
+ifneq (,$(filter js,$(USEMODULE)))
+  USEPKG += jerryscript
+  USEMODULE += xtimer
+  USEMODULE += event
+  USEMODULE += saul_reg
+  USEMODULE += saul_default
+endif
+
 # always select gpio (until explicit dependencies are sorted out)
 FEATURES_OPTIONAL += periph_gpio
 

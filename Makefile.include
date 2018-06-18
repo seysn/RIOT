@@ -637,11 +637,3 @@ ifneq (all, $(.DEFAULT_GOAL))
 endif
 
 endif # BOARD=none
-
-ifneq (,$(filter js,$(USEMODULE)))
-  USEPKG += jerryscript
-  USEMODULE += xtimer
-  USEMODULE += event
-  USEMODULE += saul_reg
-  USEMODULE += saul_default
-endif
