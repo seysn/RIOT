@@ -149,7 +149,7 @@ int js_run(const jerry_char_t *script, size_t script_size)
 
 void js_init(void)
 {
-    assert(js_event_queue);
+    //assert(js_event_queue);
 
     /* Initialize engine */
     jerry_init(JERRY_INIT_EMPTY);

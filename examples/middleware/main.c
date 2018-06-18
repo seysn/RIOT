@@ -28,6 +28,14 @@
 /* include headers generated from *.js */
 #include "main.js.h"
 
+/*
+static event_queue_t event_queue;
+
+
+#define MAIN_QUEUE_SIZE (4)
+static msg_t _main_msg_queue[MAIN_QUEUE_SIZE];
+
+*/
 
 void js_start(void)
 {
