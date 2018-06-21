@@ -1,6 +1,6 @@
 #include "js.h"
 
-#define ENABLE_DEBUG (0)
+#define ENABLE_DEBUG (1)
 #include "debug.h"
 
 void js_callback_isr(void *arg)
