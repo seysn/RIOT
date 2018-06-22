@@ -31,7 +31,7 @@
 #include "cpu_conf.h"
 #include "periph/cpuid.h"
 
-#define ENABLE_DEBUG (1)
+#define ENABLE_DEBUG (0)
 #include "debug.h"
 
 static void _resp_handler(unsigned req_state, coap_pkt_t *pdu);
@@ -45,8 +45,6 @@ static char device_id[10];
 
 extern char script[];
 extern void js_restart(void);
-
-char chaine[] = "PONG";
 
 ssize_t _blockwise_script_handler(coap_pkt_t* pkt, uint8_t *buf, size_t len)
 {
@@ -126,32 +124,8 @@ static ssize_t _riot_script_handler(coap_pkt_t *pkt, uint8_t *buf, size_t len, v
 
 }
 
-static ssize_t _riot_ping_handler(coap_pkt_t *pkt, uint8_t *buf, size_t len, void *context)
-{
-    DEBUG("Entering riot ping handler function\n");
-    (void)context;
-
-    ssize_t rsp_len = 0;
-    unsigned code = COAP_CODE_EMPTY;
-
-    unsigned method_flag = coap_method2flag(coap_get_code_detail(pkt));
-
-    switch(method_flag){
-        case COAP_GET:
-            code = COAP_CODE_205;
-            rsp_len = strlen((char *)chaine);
-            break;
-    }
-
-    return coap_reply_simple(pkt, code, buf, len,
-                             COAP_FORMAT_TEXT, (uint8_t *)chaine, rsp_len);
-}
-
-
-
 /* CoAP resources */
 static const coap_resource_t _resources[] = {
-    { "/riot/ping", COAP_GET, _riot_ping_handler, NULL},
     { "/riot/script", COAP_GET | COAP_PUT | COAP_POST, _riot_script_handler, NULL },
 };
 static gcoap_listener_t _listener = {
