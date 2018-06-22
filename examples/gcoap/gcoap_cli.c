@@ -26,7 +26,7 @@
 #include "od.h"
 #include "fmt.h"
 
-#define ENABLE_DEBUG (0)
+#define ENABLE_DEBUG (1)
 #include "debug.h"
 
 static void _resp_handler(unsigned req_state, coap_pkt_t* pdu,
@@ -287,5 +287,6 @@ int gcoap_cli_cmd(int argc, char **argv)
 
 void gcoap_cli_init(void)
 {
+    DEBUG("Register listener\n");
     gcoap_register_listener(&_listener);
 }
