@@ -31,7 +31,7 @@
 #include "cpu_conf.h"
 #include "periph/cpuid.h"
 
-#define ENABLE_DEBUG (0)
+#define ENABLE_DEBUG (1)
 #include "debug.h"
 
 static void _resp_handler(unsigned req_state, coap_pkt_t *pdu);
@@ -96,7 +96,6 @@ ssize_t _blockwise_script_handler(coap_pkt_t* pkt, uint8_t *buf, size_t len)
 static ssize_t _riot_script_handler(coap_pkt_t *pkt, uint8_t *buf, size_t len, void *context)
 {
     (void)context;
-
     ssize_t rsp_len = 0;
     unsigned code = COAP_CODE_EMPTY;
 
