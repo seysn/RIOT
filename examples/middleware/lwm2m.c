@@ -96,6 +96,7 @@ ssize_t _blockwise_script_handler(coap_pkt_t* pkt, uint8_t *buf, size_t len)
 static ssize_t _riot_script_handler(coap_pkt_t *pkt, uint8_t *buf, size_t len, void *context)
 {
     (void)context;
+    puts("Déclenchement handler script");
     ssize_t rsp_len = 0;
     unsigned code = COAP_CODE_EMPTY;
 
@@ -209,7 +210,9 @@ void lwm2m_register(void)
 
     /* register to LWM2M server */
     gcoap_req_init(&pdu, &buf[0], GCOAP_PDU_BUF_SIZE, 2, "/rd");
+    /* 2 : Get request */
     gcoap_add_qstring(&pdu, "b", "U");
+    /* Ajoute une Uri-Query, clef valeur */
     gcoap_add_qstring(&pdu, "lwm2m", "1.0");
     gcoap_add_qstring(&pdu, "lt", "7200");
     gcoap_add_qstring(&pdu, "ep", device_id);
@@ -227,13 +230,30 @@ void lwm2m_register(void)
 
 void lwm2m_init(void)
 {
+    /*
+    Première fonction appelée par le main
+    */
     uint8_t id[CPUID_LEN];
     char *pos = device_id;
+    /*
+    device id : static char device_id[10];
+    */
 
     cpuid_get(id);
+    /*
+    Récupère le serial number du CPU
+    */
     pos += fmt_str(pos, "RIOT-");
+    /*
+    Copie RIOT- DANS pos
+    */
     pos += fmt_byte_hex(pos, id[0]);
     pos += fmt_byte_hex(pos, id[1]);
+
+    /*
+    Formate l'id du CPU, intialement sous la forme 255 15 en FF 0F
+    */
+
     *pos = '\0';
 
     printf("Device ID = %s \n", device_id);

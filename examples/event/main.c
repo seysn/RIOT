@@ -26,6 +26,7 @@ It can also be embedded into existing structures
 */
 static event_t event = { .handler = handler};
 static custom_event_t custom_event = { .super.handler = custom_handler, .text = "CUSTOM EVENT"};
+static custom_event_t custom_event_forbidden = { .super.handler = custom_handler, .text = "SHOULD NOT BE REACHED"};
 
 /*
 An event queue is basically a FIFO queue of events, with some functions to
@@ -38,10 +39,10 @@ static event_queue_t queue;
 
 int main(void)
 {
-    (void) custom_event;
     event_queue_init(&queue);
-    event_loop(&queue);
     event_post(&queue, &event);
-    //event_post(&queue, &custom_event);
+    event_post(&queue, (event_t *)&custom_event);
+    event_loop(&queue);
+    event_post(&queue, (event_t *)&custom_event_forbidden);
     return 0;
 }

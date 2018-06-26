@@ -13,10 +13,22 @@ typedef struct {
     jerry_external_handler_t handler;
 } js_native_method_t;
 
+/*
+jerry_external_handler_t : pointeur vers une fonction de type
+jerry_value_t (const jerry_value_t function_obj,
+               const jerry_value_t this_val,
+               const jerry_value_t args_p[],
+               const jerry_length_t args_count);
+*/
 typedef struct {
     const char *name;
     const js_native_method_t *methods;
 } js_native_objects_t;
+
+/*
+name : nom de l'objet
+methods : tableau de méthodes de l'object
+*/
 
 typedef struct {
     list_node_t ref;

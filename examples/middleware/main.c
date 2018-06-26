@@ -70,6 +70,7 @@ void js_restart(void)
 
 int main(void)
 {
+    //event_t *current_event;
     printf("You are running RIOT on a(n) %s board.\n", RIOT_BOARD);
     printf("This board features a(n) %s MCU.\n", RIOT_MCU);
 
@@ -90,9 +91,18 @@ int main(void)
     puts("setting up event queue");
     event_queue_init(&event_queue);
     js_event_queue = &event_queue;
+    /* js_event_queue declared in js.h */
+    puts("Entering custom event loop..");
+    /*
+    while ((current_event = event_wait(js_event_queue))){
+        puts("Event triggering !");
+        printf("Event trigerred : %p\n", current_event->handler);
+        puts("Executing event");
+        current_event->handler(current_event);
+    }
+    */
 
     puts("Entering event loop...");
     event_loop(&event_queue);
-
     return 0;
 }
