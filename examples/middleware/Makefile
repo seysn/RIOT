@@ -26,6 +26,7 @@ DEVELHELP ?= 1
 USEMODULE += js
 USEMODULE += shell_commands
 USEMODULE += posix
+USEMODULE += ps
 
 USEMODULE += gnrc_netdev_default
 USEMODULE += auto_init_gnrc_netif

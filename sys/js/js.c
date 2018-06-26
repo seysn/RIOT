@@ -4,7 +4,7 @@
 
 #include "js.h"
 
-#define ENABLE_DEBUG (0)
+#define ENABLE_DEBUG (1)
 #include "debug.h"
 
 event_queue_t *js_event_queue;
