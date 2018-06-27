@@ -35,7 +35,7 @@ saul.get_by_name = function (name) {
             res = saul._find_name("lsm303dlhc");
             break;
         case "magnetometer":
-            res = saul._get_one(0x86); 
+            res = saul._get_one(0x86);
             break;
         case "brightness":
             res = saul._find_name("isl29020");

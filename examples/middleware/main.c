@@ -31,6 +31,7 @@
 /* include headers generated from *.js */
 #include "lib.js.h"
 #include "local.js.h"
+#include "main.js.h"
 
 static event_queue_t event_queue;
 
@@ -41,7 +42,6 @@ static msg_t _main_msg_queue[MAIN_QUEUE_SIZE];
 
 /* import "ifconfig" shell command, used for printing addresses */
 extern int _gnrc_netif_config(int argc, char **argv);
-extern int _ps_handler(int argc, char **argv);
 
 void js_start(event_t *unused)
 {
@@ -51,8 +51,10 @@ void js_start(event_t *unused)
     if (script_len) {
         puts("(re)initializing jerryscript engine...");
         js_init();
-        js_run(lib_js, lib_js_len);
-        js_run(local_js, local_js_len);
+        //js_run(lib_js, lib_js_len);
+        //js_run(local_js, local_js_len);
+        puts("Executing main script...");
+        js_run(main_js, main_js_len);
 
         puts("Executing script...");
         js_run((jerry_char_t*)script, script_len);
@@ -94,8 +96,6 @@ int main(void)
     js_event_queue = &event_queue;
     /* js_event_queue declared in js.h */
     puts("Entering custom event loop..");
-
-    _ps_handler(0, NULL);
 
     while ((current_event = event_wait(js_event_queue))){
         puts("Event triggering !");

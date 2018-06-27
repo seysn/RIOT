@@ -51,8 +51,10 @@ ssize_t _blockwise_script_handler(coap_pkt_t* pkt, uint8_t *buf, size_t len)
     printf("_blockwise_script_handler()\n");
 
     uint32_t result = COAP_CODE_204;
+    /* 204 : changd, answer to put or post request */
     uint32_t blknum;
     unsigned szx;
+    /* szx : size of the block */
     int res = coap_get_blockopt(pkt, COAP_OPT_BLOCK1, &blknum, &szx);
     if (res >= 0) {
         printf("blknum=%u blksize=%u more=%u\n", (unsigned)blknum, coap_szx2size(szx), res);
@@ -96,7 +98,7 @@ ssize_t _blockwise_script_handler(coap_pkt_t* pkt, uint8_t *buf, size_t len)
 static ssize_t _riot_script_handler(coap_pkt_t *pkt, uint8_t *buf, size_t len, void *context)
 {
     (void)context;
-    puts("Déclenchement handler script");
+    puts("script handler triggered\n");
     ssize_t rsp_len = 0;
     unsigned code = COAP_CODE_EMPTY;
 
@@ -106,13 +108,12 @@ static ssize_t _riot_script_handler(coap_pkt_t *pkt, uint8_t *buf, size_t len, v
     switch (method_flag) {
         case COAP_GET:
             code = COAP_CODE_205;
+            /* like HTTP 200 "OK" */
             rsp_len = strlen((char *)script);
             break;
         case COAP_POST:
         case COAP_PUT:
-        {
             return _blockwise_script_handler(pkt, buf, len);
-        }
     }
 
     return coap_reply_simple(pkt, code, buf, len,
