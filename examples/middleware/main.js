@@ -8,5 +8,8 @@
  */
 
 print("IoT-Lab-M3 RIOT javascript demo");
-
-riot.echo("Coucou, je suis une chaine que tu devrais voir");
+print("Test riot.echo()");
+riot.echo("Coucou");
+print("Test timer.now()");
+var now = timer.now();
+print("Now is " + now);
