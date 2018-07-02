@@ -126,7 +126,6 @@ void js_call_function(jerry_value_t function)
 int js_run(const jerry_char_t *script, size_t script_size)
 {
     jerry_value_t ret_value;
-    int res = 0;
 
     /* Setup Global scope code */
     ret_value = jerry_parse(NULL, 0, script, script_size, JERRY_PARSE_NO_OPTS);

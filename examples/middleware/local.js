@@ -48,18 +48,20 @@ saul.get_by_name = function (name) {
     return res;
 }
 
+/*
 coap._register_handler = coap.register_handler;
 coap.register_handler = function(path, methods, callback) {
-    var _callback = function(method) {
-        var res = callback(method);
+    var _callback = function(methods) {
+        var res = callback(methods);
 
         if (res == false) {
             this.handler.unregister();
         }
-
+        print("Coucou, tu me vois ?");
         return coap.code.CHANGED;
     }
     coap._register_handler(path, methods, _callback);
 }
+*/
 
 coap.request = coap.request_sync;

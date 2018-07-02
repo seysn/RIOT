@@ -7,9 +7,22 @@
  * directory for more details.
  */
 
+var state = 0;
+
 print("IoT-Lab-M3 RIOT javascript demo");
-print("Test riot.echo()");
-riot.echo("Coucou");
-print("Test timer.now()");
-var now = timer.now();
-print("Now is " + now);
+
+print("Debut test hoisting : appel de la fonction en brut");
+
+fonction(coap.method.GET);
+
+print("Appel de coap.register_handler :");
+
+coap.register_handler("/riot/test", coap.method.GET | coap.method.PUT, fonction);
+
+function fonction(methods){
+    if(methods === coap.method.GET){
+        print("C'est une méthode GET");
+    }
+
+    return true;
+}

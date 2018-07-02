@@ -1,6 +1,9 @@
 #include "js.h"
 #include "periph/pm.h"
 
+#define ENABLE_DEBUG (1)
+#include "debug.h"
+
 static JS_EXTERNAL_HANDLER(reboot) {
     (void)func_value;
     (void)this_value;
