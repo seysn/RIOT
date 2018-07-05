@@ -135,16 +135,70 @@ void *js_get_object_native_pointer(jerry_value_t object, const jerry_object_nati
  * @param [in] num_methods  Number of methods the object will have
  */
 jerry_value_t js_object_create_with_methods(const js_native_method_t *methods, unsigned num_methods);
+/**
+ * @brief
+ *
+ * @param
+ * @param
+ */
 jerry_value_t js_object_native_create(size_t size, const jerry_object_native_info_t *native_obj_type_info);
+/**
+ * @brief
+ *
+ * @param
+ */
 void js_callback_isr(void *arg);
+/**
+ * @brief
+ *
+ * @param
+ */
 void js_call_function(jerry_value_t callback);
+/**
+ * @brief
+ *
+ * @param
+ * @param
+ */
 void js_callback_init(js_callback_t *js_callback, jerry_value_t callback);
+/**
+ * @brief
+ *
+ * @param
+ */
 void js_callback_run(js_callback_t *js_callback);
+/**
+ * @brief
+ *
+ * @param
+ */
 void js_callback_cancel(js_callback_t *callback);
+/**
+ * @brief
+ *
+ * @param
+ */
 void js_shutdown(event_t *shutdown_done_event);
+/**
+ * @brief
+ *
+ * @param
+ *
+ */
 char *js_strdup(jerry_value_t string);
-
+/*
+ * @brief
+ *
+ * @param
+ * @param
+ */
 double js_object_get_number(jerry_value_t object, const char *name);
+/*
+ * @brief
+ *
+ * @param
+ * @param
+ */
 jerry_value_t js_get_property(jerry_value_t object, const char *name);
 
 #define js_check(x) if (jerry_value_is_error(x)) printf("%s:%u: js_check("#x") failed!\n", __FILE__, __LINE__)
