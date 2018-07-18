@@ -26,7 +26,6 @@ static JS_EXTERNAL_HANDLER(saul_reg_read)
 //    (void)this_value;
     (void)args_p;
     (void)args_cnt;
-
     phydat_t phydat;
     saul_reg_t *saul_reg = js_get_object_native_pointer(this_value, &js_saul_reg_object_native_info);
     if (!saul_reg) {

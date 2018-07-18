@@ -18,6 +18,13 @@
  * @}
  */
 
+#ifndef TEST_LPS331AP_I2C
+#error "TEST_LPS331AP_I2C not defined"
+#endif
+#ifndef TEST_LPS331AP_ADDR
+#error "TEST_LPS331AP_ADDR not defined"
+#endif
+
 #include <stdio.h>
 
 #include "net/gcoap.h"
@@ -27,11 +34,14 @@
 #include "shell.h"
 #include "fmt.h"
 #include "thread.h"
+#include "lps331ap.h"
+
+#define RATE        LPS331AP_RATE_7HZ
 
 #define ENABLE_DEBUG (1)
 #include "debug.h"
 
-#define INTERVAL (3U * US_PER_SEC)
+#define INTERVAL (1U * US_PER_SEC)
 #define MAIN_QUEUE_SIZE (4)
 
 int envoie_valeur(int argc, char **argv);
@@ -47,9 +57,17 @@ static const shell_command_t shell_commands[] = {
 };
 static char remote_addr_str[] = "2001:660:4403:484:1711:6b10:65f9:ac2a";
 char thread_send_stack[THREAD_STACKSIZE_MAIN];
+static lps331ap_t dev;
 
 int main(void)
 {
+    printf("Initializing LPS331AP sensor at I2C_%i...", TEST_LPS331AP_I2C);
+    if (lps331ap_init(&dev, TEST_LPS331AP_I2C, TEST_LPS331AP_ADDR, RATE) == 0) {
+        puts("[Initialization OK]");
+    }
+    else {
+        puts("[Initialization FAILED]");
+    }
     msg_init_queue(_main_msg_queue, MAIN_QUEUE_SIZE);
     random_init(xtimer_now().ticks32);
     puts("CoAP end node example");
@@ -69,17 +87,26 @@ int envoie_valeur(int argc, char **argv)
     uint8_t buf[GCOAP_PDU_BUF_SIZE];
     coap_pkt_t pdu;
     size_t len;
-    uint32_t value;
     ipv6_addr_t remote_addr;
+    int temp, pres;
+    int temp_abs, pres_abs;
     puts("Request initialisation ...");
     gcoap_req_init(&pdu, &buf[0], GCOAP_PDU_BUF_SIZE,
                    COAP_METHOD_PUT, "/riot/value");
     puts("Set request as CON type");
     coap_hdr_set_type(pdu.hdr, COAP_TYPE_CON);
     puts("Finishing building the request");
-    value = random_uint32();
-    printf("Random value is %" PRIu32 "\n", value);
-    fmt_u32_dec((char *)pdu.payload, value);
+    pres = lps331ap_read_pres(&dev);
+    /* Retourne la pression en mbar */
+    temp = lps331ap_read_temp(&dev);
+    /* Retourne la température en m °C */
+    pres_abs = pres / 1000;
+    pres -= pres_abs * 1000;
+    temp_abs = temp / 1000;
+    temp -= temp_abs * 1000;
+    printf("Pressure value: %2i.%03i bar - Temperature: %2i.%03i °C\n",
+           pres_abs, pres, temp_abs, temp);
+    fmt_u32_dec((char *)pdu.payload, pres);
     len = strlen((char*)pdu.payload);
     len = gcoap_finish(&pdu, len, COAP_FORMAT_TEXT);
     if (ipv6_addr_from_str(&remote_addr, remote_addr_str) == NULL) {
@@ -132,7 +159,7 @@ void *thread_send(void *arg)
 
     while(1) {
         xtimer_periodic_wakeup(&last_wakeup, INTERVAL);
-        printf("slept until %" PRIu32 "\n", xtimer_usec_from_ticks(xtimer_now()));
+        puts("Wake up !");
         envoie_valeur(0, NULL);
     }
 }

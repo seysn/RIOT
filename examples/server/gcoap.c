@@ -29,7 +29,7 @@
 #define ENABLE_DEBUG (1)
 #include "debug.h"
 
-#define MAX_VALUES 20
+#define MAX_VALUES 50
 
 /* _random_handler de type coap_handler_t */
 static ssize_t _value_handler(coap_pkt_t *pdu, uint8_t *buf, size_t len,

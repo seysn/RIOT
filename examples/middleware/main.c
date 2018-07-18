@@ -48,14 +48,13 @@ void js_start(event_t *unused)
     (void)unused;
 
     size_t script_len = strlen(script);
+    puts("(re)initializng jerryscript engine");
+    js_init();
+    //js_run(lib_js, lib_js_len);
+    //js_run(local_js, local_js_len);
+    puts("Executing main script...");
+    js_run(main_js, main_js_len);
     if (script_len) {
-        puts("(re)initializing jerryscript engine...");
-        js_init();
-        js_run(lib_js, lib_js_len);
-        js_run(local_js, local_js_len);
-        puts("Executing main script...");
-        js_run(main_js, main_js_len);
-
         puts("Executing script...");
         js_run((jerry_char_t*)script, script_len);
     }
@@ -85,15 +84,21 @@ int main(void)
     puts("Configured network interfaces:");
     _gnrc_netif_config(0, NULL);
 
-    /* register to LWM2M server */
+    /*
+    register to LWM2M server
     puts("initializing coap, registering at lwm2m server");
     lwm2m_init();
     lwm2m_register();
+    */
 
     puts("setting up event queue");
     event_queue_init(&event_queue);
     js_event_queue = &event_queue;
     /* js_event_queue declared in js.h */
+
+    puts("Executing js...");
+
+    js_start(NULL);
 
     puts("Entering event loop...");
     event_loop(&event_queue);

@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include "shell.h"
+#include "log.h"
 
 int main(void)
 {
