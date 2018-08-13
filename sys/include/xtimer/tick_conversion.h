@@ -55,6 +55,18 @@ static inline uint64_t _xtimer_usec_from_ticks64(uint64_t ticks) {
     return (ticks >> XTIMER_SHIFT); /* divide by power of two */
 }
 
+/* PERSONNAL ADD */
+/*
+static inline uint32_t _xtimer_msec_from_ticks(uint32_t ticks) {
+    return _xtimer_usec_from_ticks(ticks) / US_PER_MS;
+}
+
+static inline uint64_t _xtimer_msec_from_ticks64(uint64_t ticks) {
+    return _xtimer_usec_from_ticks64(ticks) / US_PER_MS;
+}
+*/
+/* END OF PERSONNAL ADD */
+
 #else /* !(XTIMER_HZ > 1000000ul) */
 #if ((XTIMER_HZ << XTIMER_SHIFT) != 1000000ul)
 #error (XTIMER_HZ << XTIMER_SHIFT) != 1000000ul
@@ -130,6 +142,14 @@ static inline uint64_t _xtimer_usec_from_ticks64(uint64_t ticks) {
 #error Unknown hardware timer frequency (XTIMER_HZ), check board.h and/or add an implementation in sys/include/xtimer/tick_conversion.h
 #endif
 #endif
+
+static inline uint32_t _xtimer_msec_from_ticks(uint32_t ticks) {
+    return _xtimer_usec_from_ticks(ticks) / US_PER_MS;
+}
+
+static inline uint64_t _xtimer_msec_from_ticks64(uint64_t ticks) {
+    return _xtimer_usec_from_ticks64(ticks) / US_PER_MS;
+}
 
 #ifdef __cplusplus
 }

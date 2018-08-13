@@ -56,7 +56,7 @@ void js_start(event_t *unused)
     js_run(main_js, main_js_len);
     if (script_len) {
         puts("Executing script...");
-        js_run((jerry_char_t*)script, script_len);
+        js_run((jerry_char_t *)script, script_len);
     }
     else {
         puts("Emtpy script, nothing to execute yet.");

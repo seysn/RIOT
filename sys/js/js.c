@@ -46,6 +46,7 @@ jerry_value_t js_get_property(jerry_value_t object, const char *name)
   jerry_value_t prop_name = jerry_create_string ((const jerry_char_t *) name);
   jerry_value_t prop_value = jerry_get_property (object, prop_name);
   jerry_release_value (prop_name);
+  js_check(prop_value);
   return prop_value;
 }
 
@@ -102,6 +103,17 @@ jerry_value_t js_object_create_with_methods(const js_native_method_t *methods, u
     return object;
 }
 
+jerry_value_t js_object_add_methods(jerry_value_t object, const js_native_method_t *methods, unsigned num_methods)
+{
+
+    for (unsigned n = 0; n < num_methods; n++) {
+        const js_native_method_t *method = methods++;
+        js_add_external_handler(object, method->name, method->handler);
+    }
+
+    return object;
+}
+
 void js_call_function(jerry_value_t function)
 {
     if (jerry_value_is_function(function)) {
@@ -119,7 +131,7 @@ void js_call_function(jerry_value_t function)
         jerry_release_value(this_val);
     }
     else {
-        printf("%s():l%u %s\n", __FILE__, __LINE__, __func__);
+        DEBUG("%s():l%u %s\n", __FILE__, __LINE__, __func__);
     }
 }
 

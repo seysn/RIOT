@@ -65,22 +65,23 @@ static void _js_coap_handler_event_cb(event_t *event)
     jerry_value_t ret_val = 0;
     jerry_value_t reply_payload_val = 0;
     unsigned reply_code = COAP_CODE_INTERNAL_SERVER_ERROR;
+    unsigned format_code = COAP_FORMAT_NONE;
 
     void *reply_buf = NULL;
     size_t reply_len = 0;
 
-    DEBUG("%s:l%u:%s()\n", __FILE__, __LINE__, __func__);
+    DEBUG("%s:l%u:%s() : start of the function\n", __FILE__, __LINE__, __func__);
     js_coap_handler_t *js_coap_handler = (js_coap_handler_t *) event;
 
     object = jerry_create_object();
     if (jerry_value_is_error(object)) {
-        DEBUG("%s():l%u %s\n", __FILE__, __LINE__, __func__);
+        DEBUG("%s():l%u %s : impossible to create object\n", __FILE__, __LINE__, __func__);
         goto error;
     }
 
     methods_val = jerry_create_number(coap_method2flag(coap_get_code_detail(_gcoap_req.pkt)));
     if (jerry_value_is_error(methods_val)) {
-        DEBUG("%s():l%u %s\n", __FILE__, __LINE__, __func__);
+        DEBUG("%s():l%u %s : methods error\n", __FILE__, __LINE__, __func__);
         goto error;
     }
 
@@ -92,7 +93,7 @@ static void _js_coap_handler_event_cb(event_t *event)
 
         payload_val = jerry_create_string_sz((jerry_char_t *)_gcoap_req.pkt->payload, _gcoap_req.pkt->payload_len);
         if (jerry_value_is_error(payload_val)) {
-            DEBUG("%s():l%u %s\n", __FILE__, __LINE__, __func__);
+            DEBUG("%s():l%u %s : payload error\n", __FILE__, __LINE__, __func__);
             goto error;
         }
         js_add_object(object, payload_val, "payload");
@@ -105,25 +106,54 @@ static void _js_coap_handler_event_cb(event_t *event)
     ret_val = jerry_call_function(js_coap_handler->callback, object, args, payload_val ? 2 : 1);
 
     if (jerry_value_is_error(ret_val)) {
-        DEBUG("%s():l%u %s\n", __FILE__, __LINE__, __func__);
+        DEBUG("%s():l%u %s : ret_val error \n", __FILE__, __LINE__, __func__);
         goto error;
     }
 
     jerry_release_value(payload_val);
     payload_val = 0;
 
-    reply_payload_val = js_get_property(object, "reply");
+    reply_payload_val = js_get_property(ret_val, "reply");
+    reply_code = jerry_get_number_value(js_get_property(ret_val, "code"));
+    format_code = jerry_get_number_value(js_get_property(ret_val, "format"));
 
-    reply_code = jerry_get_number_value(ret_val);
-    switch(reply_code) {
-        case COAP_CODE_CREATED:
-        case COAP_CODE_DELETED:
-        case COAP_CODE_VALID:
-        case COAP_CODE_CHANGED:
-        case COAP_CODE_CONTENT:
+    reply_buf = js_strdup(reply_payload_val);
+
+
+    switch(format_code) {
+        case COAP_FORMAT_TEXT:
+            DEBUG("%s():l%u %s : COAP_FORMAT_TEXT\n", __FILE__, __LINE__, __func__);
+        case COAP_FORMAT_LINK:
+            DEBUG("%s():l%u %s : COAP_FORMAT_LINK\n", __FILE__, __LINE__, __func__);
+        case COAP_FORMAT_OCTET:
+            DEBUG("%s():l%u %s : COAP_FORMAT_OCTET\n", __FILE__, __LINE__, __func__);
+        case COAP_FORMAT_JSON:
+            DEBUG("%s():l%u %s : COAP_FORMAT_JSON\n", __FILE__, __LINE__, __func__);
+        case COAP_FORMAT_CBOR:
+            DEBUG("%s():l%u %s : COAP_FORMAT_CBOR\n", __FILE__, __LINE__, __func__);
+        case COAP_FORMAT_NONE:
+            DEBUG("%s():l%u %s : COAP_FORMAT_NONE\n", __FILE__, __LINE__, __func__);
             break;
         default:
-            DEBUG("%s():l%u %s\n", __FILE__, __LINE__, __func__);
+            DEBUG("%s():l%u %s : COAP_FORMAT_ERROR\n", __FILE__, __LINE__, __func__);
+            format_code = COAP_FORMAT_TEXT;
+            break;
+    }
+
+    switch(reply_code) {
+        case COAP_CODE_CREATED:
+            DEBUG("%s():l%u %s : COAP_CODE_CREATED\n", __FILE__, __LINE__, __func__);
+        case COAP_CODE_DELETED:
+            DEBUG("%s():l%u %s : COAP_CODE_DELETED\n", __FILE__, __LINE__, __func__);
+        case COAP_CODE_VALID:
+            DEBUG("%s():l%u %s : COAP_CODE_VALID\n", __FILE__, __LINE__, __func__);
+        case COAP_CODE_CHANGED:
+            DEBUG("%s():l%u %s : COAP_CODE_CHANGED\n", __FILE__, __LINE__, __func__);
+        case COAP_CODE_CONTENT:
+            DEBUG("%s():l%u %s : COAP_CODE_CONTENT\n", __FILE__, __LINE__, __func__);
+            break;
+        default:
+            DEBUG("%s():l%u %s : COAP_CODE_ERROR\n", __FILE__, __LINE__, __func__);
             reply_code = COAP_CODE_INTERNAL_SERVER_ERROR;
             goto error;
     }
@@ -142,7 +172,7 @@ static void _js_coap_handler_event_cb(event_t *event)
 error:
 
     _gcoap_req.len = coap_reply_simple(_gcoap_req.pkt, reply_code, _gcoap_req.buf, _gcoap_req.len,
-            COAP_FORMAT_NONE, reply_buf, reply_len);
+            format_code, reply_buf, reply_len);
 
     if (reply_buf) {
         free(reply_buf);
@@ -224,7 +254,7 @@ static jerry_value_t js_coap_handler_create(jerry_value_t callback, const char *
     js_coap_handler->listener.resources_len = 1;
 
     js_native_ref_add(&js_coap_handler->ref, object);
-
+    DEBUG("%s():l%u %s 0x%08x : start listening\n", __FILE__, __LINE__, __func__, methods);
     gcoap_register_listener(&js_coap_handler->listener);
 
     return object;

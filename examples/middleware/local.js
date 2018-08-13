@@ -48,7 +48,7 @@ saul.get_by_name = function (name) {
     return res;
 }
 
-/*
+
 coap._register_handler = coap.register_handler;
 coap.register_handler = function(path, methods, callback) {
     var _callback = function(methods) {
@@ -62,6 +62,6 @@ coap.register_handler = function(path, methods, callback) {
     }
     coap._register_handler(path, methods, _callback);
 }
-*/
+
 
 coap.request = coap.request_sync;

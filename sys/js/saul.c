@@ -6,7 +6,7 @@
 #include "js.h"
 #include "saul_reg.h"
 
-#define ENABLE_DEBUG (1)
+#define ENABLE_DEBUG (0)
 #include "debug.h"
 
 static void _js_saul_reg_freecb(void *native_p)
@@ -23,7 +23,6 @@ static const jerry_object_native_info_t js_saul_reg_object_native_info =
 static JS_EXTERNAL_HANDLER(saul_reg_read)
 {
     (void)func_value;
-//    (void)this_value;
     (void)args_p;
     (void)args_cnt;
     phydat_t phydat;
@@ -46,7 +45,6 @@ error:
 static JS_EXTERNAL_HANDLER(saul_reg_write)
 {
     (void)func_value;
-//    (void)this_value;
     (void)args_p;
     (void)args_cnt;
 

@@ -82,6 +82,7 @@ static void _resp_handler(unsigned req_state, coap_pkt_t* pdu,
         }
         else {
             printf(", %u bytes\n", pdu->payload_len);
+            printf("Payload is %s \n",(char *)pdu->payload);
             od_hex_dump(pdu->payload, pdu->payload_len, OD_WIDTH_DEFAULT);
         }
     }

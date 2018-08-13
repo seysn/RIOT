@@ -23,6 +23,11 @@ ifneq (,$(filter ndn-riot,$(USEPKG)))
   USEPKG += micro-ecc
 endif
 
+ifneq (, $(filter regression,$(USEMODULE)))
+  USEPKG += libfixmath
+  USEMODULE += libfixmath
+endif
+
 ifneq (,$(filter csma_sender,$(USEMODULE)))
   USEMODULE += random
   USEMODULE += xtimer

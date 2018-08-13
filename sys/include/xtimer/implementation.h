@@ -137,6 +137,16 @@ static inline uint64_t xtimer_now_usec64(void)
     return xtimer_usec_from_ticks64(xtimer_now64());
 }
 
+static inline uint32_t xtimer_now_msec(void)
+{
+    return xtimer_msec_from_ticks(xtimer_now());
+}
+
+static inline uint64_t xtimer_now_msec64(void)
+{
+    return xtimer_msec_from_ticks64(xtimer_now64());
+}
+
 static inline void _xtimer_spin(uint32_t offset) {
     uint32_t start = _xtimer_lltimer_now();
 #if XTIMER_MASK
@@ -260,6 +270,20 @@ static inline uint64_t xtimer_usec_from_ticks64(xtimer_ticks64_t ticks)
 {
     return _xtimer_usec_from_ticks64(ticks.ticks64);
 }
+
+/* PERSONNAL ADD */
+
+static inline uint32_t xtimer_msec_from_ticks(xtimer_ticks32_t ticks)
+{
+    return _xtimer_msec_from_ticks(ticks.ticks32);
+}
+
+static inline uint64_t xtimer_msec_from_ticks64(xtimer_ticks64_t ticks)
+{
+    return _xtimer_msec_from_ticks64(ticks.ticks64);
+}
+
+/* END OF PERSONNAL ADD */
 
 static inline xtimer_ticks32_t xtimer_ticks(uint32_t ticks)
 {

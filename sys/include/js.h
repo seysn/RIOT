@@ -50,7 +50,7 @@ typedef struct {
 } js_native_objects_t;
 
 /**
- * @brief
+ * @brief Linked list of the objects that are refered
  */
 typedef struct {
     list_node_t ref;
@@ -120,9 +120,8 @@ void js_add_external_handler(jerry_value_t object, const char *name, jerry_exter
 void js_add_object(jerry_value_t object, jerry_value_t other, const char *name);
 
 /**
- * @brief
+ * @brief get the object native pointer with specific type
  *
- * @param
  * @param
  * @param
  */
@@ -131,29 +130,33 @@ void *js_get_object_native_pointer(jerry_value_t object, const jerry_object_nati
 /**
  * @brief create an object with specific methods
  *
- * @param [in] methods      List of methods the object will have
- * @param [in] num_methods  Number of methods the object will have
+ * @param [in] methods                      List of methods the object will have
+ * @param [in] num_methods                  Number of methods the object will have
  */
 jerry_value_t js_object_create_with_methods(const js_native_method_t *methods, unsigned num_methods);
+
 /**
- * @brief
+ * @brief create a native object with specific type info
  *
- * @param
- * @param
+ * @param [in] size                         Size of the native object
+ * @param [in] native_obj_type_info
  */
 jerry_value_t js_object_native_create(size_t size, const jerry_object_native_info_t *native_obj_type_info);
+
 /**
  * @brief
  *
  * @param
  */
 void js_callback_isr(void *arg);
+
 /**
- * @brief
+ * @brief Call a js function with this value as undefined and without parameters
  *
- * @param
+ * @param [in] js function to call
  */
 void js_call_function(jerry_value_t callback);
+
 /**
  * @brief
  *
@@ -161,31 +164,36 @@ void js_call_function(jerry_value_t callback);
  * @param
  */
 void js_callback_init(js_callback_t *js_callback, jerry_value_t callback);
+
 /**
  * @brief
  *
  * @param
  */
 void js_callback_run(js_callback_t *js_callback);
+
 /**
  * @brief
  *
  * @param
  */
 void js_callback_cancel(js_callback_t *callback);
+
 /**
  * @brief
  *
  * @param
  */
 void js_shutdown(event_t *shutdown_done_event);
+
 /**
- * @brief
+ * @brief allocates and return pointer to char buffer of the Javascript string
  *
- * @param
+ * @param [in] Javascript string to duplicate into char buffer
  *
  */
 char *js_strdup(jerry_value_t string);
+
 /*
  * @brief
  *
@@ -193,6 +201,7 @@ char *js_strdup(jerry_value_t string);
  * @param
  */
 double js_object_get_number(jerry_value_t object, const char *name);
+
 /*
  * @brief
  *

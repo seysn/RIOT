@@ -370,6 +370,8 @@ static inline xtimer_ticks64_t xtimer_ticks_from_usec64(uint64_t usec);
  */
 static inline uint32_t xtimer_usec_from_ticks(xtimer_ticks32_t ticks);
 
+static inline uint32_t xtimer_msec_from_ticks(xtimer_ticks32_t ticks);
+
 /**
  * @brief Convert xtimer ticks to microseconds, 64 bit version
  *
@@ -378,6 +380,8 @@ static inline uint32_t xtimer_usec_from_ticks(xtimer_ticks32_t ticks);
  * @return microseconds
  */
 static inline uint64_t xtimer_usec_from_ticks64(xtimer_ticks64_t ticks);
+
+static inline uint64_t xtimer_msec_from_ticks64(xtimer_ticks64_t ticks);
 
 /**
  * @brief Create an xtimer time stamp

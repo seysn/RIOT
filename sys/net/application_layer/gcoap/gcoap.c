@@ -183,7 +183,7 @@ static void _listen(sock_udp_t *sock)
     if (res <= 0) {
 #if ENABLE_DEBUG
         if (res < 0 && res != -ETIMEDOUT) {
-            DEBUG("gcoap: udp recv failure: %d\n", res);
+            DEBUG("gcoap: udp recv failure: %zd\n", res);
         }
 #endif
         return;
