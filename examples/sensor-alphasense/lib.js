@@ -29,27 +29,33 @@ coap.format = {
 saul.get_by_name = function (name) {
     var res;
     switch (name) {
-        case "led":
-            res = saul._find_name("LED(red)");
-            break;
-        case "pressure":
-            res = saul._find_name("lps331ap");
-            break;
-        case "temperature":
-            res = saul._get_one(0x82);
-            break;
-        case "accelerometer":
-            res = saul._find_name("lsm303dlhc");
-            break;
-        case "magnetometer":
-            res = saul._get_one(0x86);
-            break;
-        case "brightness":
-            res = saul._find_name("isl29020");
-            break;
-        case "gyrometer":
-            res = saul._find_name("l3g4200d");
-            break;
+    case "led":
+        res = saul._find_name("LED(red)");
+        break;
+    case "pressure":
+        res = saul._find_name("lps331ap");
+        break;
+    case "temperature":
+        res = saul._get_one(0x82);
+        break;
+    case "accelerometer":
+        res = saul._find_name("lsm303dlhc");
+        break;
+    case "magnetometer":
+        res = saul._get_one(0x86);
+        break;
+    case "brightness":
+        res = saul._find_name("isl29020");
+        break;
+    case "gyrometer":
+        res = saul._find_name("l3g4200d");
+        break;
+    case "OPC-R1":
+        res = saul._find_name("opc-r1");
+    case "OPC-N3":
+    case "particulates":
+        res = saul._find_name("opc-n3");
+        break;
     }
     return res;
 };
