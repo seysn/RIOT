@@ -21,7 +21,7 @@ void js_callback_init(js_callback_t *js_callback, jerry_value_t callback)
     DEBUG("init %p\n", (void *)js_callback);
     js_callback->event.handler = js_event_callback;
 
-    DEBUG("acquire obj %lu\n", js_callback->callback.object);
+    //DEBUG("acquire obj %lu\n", js_callback->callback.object);
     js_native_ref_add(&js_callback->callback, callback);
 }
 

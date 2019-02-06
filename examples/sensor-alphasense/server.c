@@ -115,7 +115,7 @@ static const coap_resource_t _ressources[] = {
       But, this ressource is not used at the moment, so it's not a problem to
       remove it.
     */
-
+    NULL
     /* { "/riot/script", COAP_GET | COAP_PUT | COAP_POST, _riot_script_handler, NULL}, */
 };
 static gcoap_listener_t _listener = {

@@ -1,4 +1,8 @@
-# Example RIOT COAP server
+# Sensor-Alphasense
+
+This project is meant to be used on a system with an alphasense sensor.
+
+## Example RIOT COAP server
 
 (From https://www.iot-lab.info/tutorials/riot-coap-m3/)
 
@@ -29,9 +33,24 @@ $ coap get coap://[2001:660:4403:480:1711:6b10:65fb:841a]/riot/board
 (2.05)	iotlab-m3
 ```
 
-# Sensor-alphasense
+## Sensor-alphasense firmware
 
 Same as previous example, just replace `nanocoap_server.elf` with `sensor_alphasense.elf`.
+
+# Notes
+
+## Send JSON to alphasense api
+
+Right now, JerryScript doesn't support the XMLHttpRequest object as any other would do.
+So it's pretty difficult to send a GET HTTP Request because of that.
+The first solution would be to use the [iot.js](http://iotjs.net/) that has a http object.
+But I haven't figured out how to use this library with RIOT.
+
+The second solution would be to create a module that implements the http request using TCP socket.
+As we can see on [this tutorial](https://github.com/RIOT-OS/Tutorials/tree/master/task-06), using UDP packets doesn't seem really hard, so TCP packets should be the same.
+
+I started the second solution with a [http.c](../../sys/js/http.c) file.
+But it seems there is no implementations of TCP sockets at the moment as we can see on [this issue](https://github.com/RIOT-OS/RIOT/issues/10664).
 
 # Links
 [Previous project](https://github.com/Lydrin/RIOT/tree/anthony/examples/anthony)

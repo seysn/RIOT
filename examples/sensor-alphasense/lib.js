@@ -23,9 +23,6 @@ coap.format = {
     NONE : 65535
 };
 
-/* TODO : Maybe move these to the C code ? */
-
-
 saul.get_by_name = function (name) {
     var res;
     switch (name) {
@@ -51,9 +48,9 @@ saul.get_by_name = function (name) {
         res = saul._find_name("l3g4200d");
         break;
     case "OPC-R1":
+    case "particulates":
         res = saul._find_name("opc-r1");
     case "OPC-N3":
-    case "particulates":
         res = saul._find_name("opc-n3");
         break;
     }
@@ -67,12 +64,10 @@ var sensor_handler = function(methods) {
     }
 
     print("Methods are " + methods);
-    var temperature = saul.get_by_name("temperature").read();
-    var pressure = saul.get_by_name("pressure").read();
+    var particulates = saul.get_by_name("particulates").read();
     var sensors = {
         Idx: cpt++,
-        Temp: temperature,
-        Pres: pressure
+        Part: particulates
     };
     var response = {
         reply: JSON.stringify(sensors),
@@ -83,6 +78,5 @@ var sensor_handler = function(methods) {
     return response;
 };
 
-/* TODO: Renvoyer l'object contenant la réponse : reply, code */
 
 coap.register_handler("/riot/js", coap.method.GET, sensor_handler);

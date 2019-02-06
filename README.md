@@ -1,3 +1,10 @@
+# This is a fork of the RIOT-OS repository
+This fork is meant to host the [sensor-alphasense project](examples/sensor-alphasense) with modified RIOT-OS MODULES.
+
+Refer to [RIOT-OS/RIOT](https://github.com/RIOT-OS/RIOT/) for the official repository.
+
+
+
 [![Nightly CI status master][master-ci-badge]][master-ci-link]
 [![IRC][irc-badge]][irc-link]
 
