@@ -4,6 +4,7 @@
 #include "event.h"
 #include "js.h"
 #include "net/af.h"
+#include "net/ipv4/addr.h"
 #include "net/ipv6/addr.h"
 #include "net/sock/tcp.h"
 
@@ -12,9 +13,9 @@ static JS_EXTERNAL_HANDLER(http_get_ipv4) {
     (void)this_value;
 
     uint8_t buf[128];
-    sock_tcp_t *sock = NULL;
+    sock_tcp_t sock;
     int res;
-    sock_tcp_ep_t remote = SOCK_IPV6_EP_ANY;
+    sock_tcp_ep_t remote = SOCK_IPV4_EP_ANY;
 
     if (args_cnt < 2) {
         puts("http.get_ipv4(): not enough arguments");
@@ -22,12 +23,12 @@ static JS_EXTERNAL_HANDLER(http_get_ipv4) {
     }
 
     if (!jerry_value_is_string(args_p[0])) {
-        puts("saul.get_by_name(): arg 0 not a string");
+        puts("saul.get_ipv4(): arg 0 not a string");
         return 0;
     }
 
     if (!jerry_value_is_string(args_p[1])) {
-        puts("saul.get_by_name(): arg 1 not a string");
+        puts("saul.get_ipv4(): arg 1 not a string");
         return 0;
     }
 
@@ -40,7 +41,7 @@ static JS_EXTERNAL_HANDLER(http_get_ipv4) {
     jerry_string_to_char_buffer(args_p[0], (jerry_char_t*)content, sizeof(content));
 
     remote.port = 80;
-    ipv6_addr_from_str((ipv6_addr_t *)&remote.addr, host);
+    ipv4_addr_from_str((ipv6_addr_t *)&remote.addr, host);
     if (sock_tcp_connect(sock, &remote, 0, 0) < 0) {
         puts("Error connecting sock");
         return 1;
@@ -52,6 +53,8 @@ static JS_EXTERNAL_HANDLER(http_get_ipv4) {
                                  SOCK_NO_TIMEOUT)) < 0) {
             puts("Disconnected");
         }
+
+        // Testing, needs to be returned
         printf("Read: \"");
         for (int i = 0; i < res; i++) {
             printf("%c", buf[i]);
@@ -62,8 +65,9 @@ static JS_EXTERNAL_HANDLER(http_get_ipv4) {
     return res;
 }
 
-const js_native_method_t http_methods[] = {
-    { "_get_ipv4", js_external_handler_http_get_ipv4 }
+const js_native_method_t http_methods[] =
+{
+ { "_get_ipv4", js_external_handler_http_get_ipv4 }
 };
 
 const unsigned http_methods_len = sizeof(http_methods) / sizeof(http_methods[0]);
