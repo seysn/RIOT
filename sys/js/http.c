@@ -8,6 +8,11 @@
 #include "net/ipv6/addr.h"
 #include "net/sock/tcp.h"
 
+// DO NOT USE THIS MODULE ON ITS STATE
+// - TCP module on RIOT isn't implemented (sock_tcp_t, sock_tcp_write, ... won't work)
+// - Missing http request (GET / HTTP/1.1) and headers
+// - Doesn't returns response
+
 static JS_EXTERNAL_HANDLER(http_get_ipv4) {
     (void)func_value;
     (void)this_value;
@@ -46,6 +51,8 @@ static JS_EXTERNAL_HANDLER(http_get_ipv4) {
         puts("Error connecting sock");
         return 1;
     }
+
+    // TODO : Write full http request + header
     if ((res = sock_tcp_write(sock, content, strlen(content))) < 0) {
         puts("Errored on write");
     } else {
@@ -54,7 +61,7 @@ static JS_EXTERNAL_HANDLER(http_get_ipv4) {
             puts("Disconnected");
         }
 
-        // Testing, needs to be returned
+        // TODO : Testing, needs to be returned
         printf("Read: \"");
         for (int i = 0; i < res; i++) {
             printf("%c", buf[i]);
