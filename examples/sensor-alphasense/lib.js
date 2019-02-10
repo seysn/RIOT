@@ -57,7 +57,7 @@ saul.get_by_name = function (name) {
     return res;
 };
 
-var cpt = 0;
+var datastream = 1;
 var sensor_handler = function(methods) {
     if(methods != coap.method.GET) {
         return new Error();
@@ -65,10 +65,19 @@ var sensor_handler = function(methods) {
 
     print("Methods are " + methods);
     var particulates = saul.get_by_name("particulates").read();
+
+    // This is an Observation object for Sensorthings API.
+    // Before you use it, be sure that the datastream is correctly
+    // created and the datastream ID is correctly set.
     var sensors = {
-        Idx: cpt++,
-        Part: particulates
+        "phenomenonTime": new Date().toISOString(),
+        "resultTime" : new Date().toISOString(),
+        "result" : particulates,
+        "Datastream": {
+            "@iot.id": datastream
+        }
     };
+
     var response = {
         reply: JSON.stringify(sensors),
         code: coap.code.CONTENT,
@@ -78,5 +87,12 @@ var sensor_handler = function(methods) {
     return response;
 };
 
+var setDatastream = function(value) {
+    datastream = value;
+};
 
+// TODO : Data needs to be sent to a Sensorthings API instead of returned
 coap.register_handler("/riot/js", coap.method.GET, sensor_handler);
+
+// Modify the Datastream value
+coap.register_handler("/riot/datastream", coap.method.PUT, setDatastream);
