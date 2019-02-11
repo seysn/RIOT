@@ -46,11 +46,9 @@ So it's pretty difficult to send a GET HTTP Request because of that.
 The first solution would be to use the [iot.js](http://iotjs.net/) that has a http object.
 But I haven't figured out how to use this library with RIOT.
 
-The second solution would be to create a module that implements the http request using TCP socket.
-As we can see on [this tutorial](https://github.com/RIOT-OS/Tutorials/tree/master/task-06), using UDP packets doesn't seem really hard, so TCP packets should be the same.
+Creating a module that implements the http request using TCP socket would be a good solution, but it seems there is no implementations of TCP sockets at the moment as we can see on [this issue](https://github.com/RIOT-OS/RIOT/issues/10664).
 
-I started the second solution with a [http.c](../../sys/js/http.c) file.
-But it seems there is no implementations of TCP sockets at the moment as we can see on [this issue](https://github.com/RIOT-OS/RIOT/issues/10664).
+The best solution would be to use [gcoap](https://riot-os.org/api/group__net__gcoap.html) as it is supported by SensorThings API and the [JS module already exists](../../sys/js/coap.c).
 
 # Links
 [Previous project](https://github.com/Lydrin/RIOT/tree/anthony/examples/anthony)
