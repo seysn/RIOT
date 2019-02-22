@@ -50,6 +50,12 @@ Creating a module that implements the http request using TCP socket would be a g
 
 The best solution would be to use [gcoap](https://riot-os.org/api/group__net__gcoap.html) as it is supported by SensorThings API and the [JS module already exists](../../sys/js/coap.c).
 
+## Undefined behaviour : Choosing nodes and sub-networks on IoT-Lab
+
+I've figured out that sometimes, [gnrc_border_router](../gnrc_border_router) doesn't link with the other node.
+This undefined behaviour seems to be related about the nodes and/or sub-networks you're choosing.
+I don't know exactly what's the problem, but I am pretty sure it's from their end.
+
 # Links
 [Previous project](https://github.com/Lydrin/RIOT/tree/anthony/examples/anthony)
 [Old middleware](https://github.com/Lydrin/RIOT/tree/anthony/examples/middleware)

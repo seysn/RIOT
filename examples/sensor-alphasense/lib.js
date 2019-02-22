@@ -57,19 +57,24 @@ saul.get_by_name = function (name) {
     return res;
 };
 
-var datastream = 1;
-var sensor_handler = function(methods) {
-    if(methods != coap.method.GET) {
-        return new Error();
-    }
+// SensorThings : Database address
+var addr = "127.0.0.1";
 
-    print("Methods are " + methods);
-    var particulates = saul.get_by_name("particulates").read();
+// SensorThings : Datasteam ID
+var datastream = 1;
+
+// Interval of update (in seconds)
+var interval = 60;
+
+// Function that get particulates value
+// Returns JSON that fit in a SensorThings API
+var get_particulates = function(name) {
+    var particulates = saul.get_by_name(name).read();
 
     // This is an Observation object for Sensorthings API.
     // Before you use it, be sure that the datastream is correctly
     // created and the datastream ID is correctly set.
-    var sensors = {
+    var value = {
         "phenomenonTime": new Date().toISOString(),
         "resultTime" : new Date().toISOString(),
         "result" : particulates,
@@ -77,6 +82,21 @@ var sensor_handler = function(methods) {
             "@iot.id": datastream
         }
     };
+
+    return value;
+};
+
+// COAP Handler that return particulates value
+// Doesn't push anything in a database
+// Returns JSON that fit in a SensorThings API
+var sensor_handler = function(methods) {
+    if(methods != coap.method.GET) {
+        return new Error();
+    }
+
+    print("Methods are " + methods);
+
+    var sensor = get_particulates("particulates");
 
     var response = {
         reply: JSON.stringify(sensors),
@@ -87,12 +107,21 @@ var sensor_handler = function(methods) {
     return response;
 };
 
-var setDatastream = function(value) {
-    datastream = value;
-};
+// TODO : needs to be tested after setting a SensorThings API
+//var sensor_routine = function() {
+//    var value = get_particulates("particulates");
+
+//    // see coap_request in ../../sys/js/coap.c
+//    coap.request_sync(addr, 0, JSON.stringify(value));
+//};
+//setInterval(sensor_handler, interval * 1000);
+
 
 // TODO : Data needs to be sent to a Sensorthings API instead of returned
 coap.register_handler("/riot/js", coap.method.GET, sensor_handler);
 
 // Modify the Datastream value
+var setDatastream = function(value) {
+    datastream = value;
+};
 coap.register_handler("/riot/datastream", coap.method.PUT, setDatastream);
