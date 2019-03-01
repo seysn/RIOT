@@ -98,14 +98,26 @@ var sensor_handler = function(methods) {
 
     var sensor = get_particulates("particulates");
 
+    /*
+    var sensor = {
+        "phenomenonTime": new Date().toISOString(),
+        "resultTime" : new Date().toISOString(),
+        "result" : 123,
+        "Datastream": {
+            "@iot.id": datastream
+        }
+    };
+    */
+
     var response = {
-        reply: JSON.stringify(sensors),
+        reply: JSON.stringify(sensor),
         code: coap.code.CONTENT,
         format: coap.format.TEXT
     };
 
     return response;
 };
+
 
 // TODO : needs to be tested after setting a SensorThings API
 //var sensor_routine = function() {
@@ -121,7 +133,11 @@ var sensor_handler = function(methods) {
 coap.register_handler("/riot/js", coap.method.GET, sensor_handler);
 
 // Modify the Datastream value
-var setDatastream = function(value) {
-    datastream = value;
+var setDatastream = function(method, value) {
+    if(method != coap.method.PUT) {
+        return new Error();
+    }
+
+    datastream = parseInt(value);
 };
 coap.register_handler("/riot/datastream", coap.method.PUT, setDatastream);

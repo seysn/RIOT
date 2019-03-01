@@ -335,12 +335,15 @@ ssize_t coap_reply_simple(coap_pkt_t *pkt,
     if (payload_len) {
         bufpos += coap_put_option_ct(bufpos, 0, ct);
         *bufpos++ = 0xff;
-
+    }
+    ssize_t res = coap_build_reply(pkt, code, buf, len,
+                                   bufpos - payload_start + payload_len);
+    if (payload_len && (res > 0)) {
+        assert(payload);
         memcpy(bufpos, payload, payload_len);
-        bufpos += payload_len;
     }
 
-    return coap_build_reply(pkt, code, buf, len, bufpos - payload_start);
+    return res;
 }
 
 ssize_t coap_build_reply(coap_pkt_t *pkt, unsigned code,
@@ -349,12 +352,20 @@ ssize_t coap_build_reply(coap_pkt_t *pkt, unsigned code,
     unsigned tkl = coap_get_token_len(pkt);
     unsigned len = sizeof(coap_hdr_t) + tkl;
 
-    if ((len + payload_len + 1) > rlen) {
+    if ((len + payload_len) > rlen) {
         return -ENOSPC;
     }
 
-    /* if code is COAP_CODE_EMPTY (zero), use RST as type, else RESP */
-    unsigned type = code ? COAP_RESP : COAP_RST;
+    /* if code is COAP_CODE_EMPTY (zero), assume Reset (RST) type */
+    unsigned type = COAP_TYPE_RST;
+    if (code) {
+        if (coap_get_type(pkt) == COAP_TYPE_CON) {
+            type = COAP_TYPE_ACK;
+        }
+        else {
+            type = COAP_TYPE_NON;
+        }
+    }
 
     coap_build_hdr((coap_hdr_t *)rbuf, type, pkt->token, tkl, code,
                    ntohs(pkt->hdr->id));
@@ -377,7 +388,7 @@ ssize_t coap_build_hdr(coap_hdr_t *hdr, unsigned type, uint8_t *token, size_t to
     hdr->id = htons(id);
 
     if (token_len) {
-        memcpy(hdr->data, token, token_len);
+        memcpy(coap_hdr_data_ptr(hdr), token, token_len);
     }
 
     return sizeof(coap_hdr_t) + token_len;

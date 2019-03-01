@@ -19,16 +19,16 @@
  * @}
  */
 
- #include <stdint.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include "net/gcoap.h"
- //#include "od.h"
- //#include "fmt.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "net/gcoap.h"
+//#include "od.h"
+//#include "fmt.h"
 
- #define ENABLE_DEBUG (1)
- #include "debug.h"
+#define ENABLE_DEBUG (1)
+#include "debug.h"
 
 extern char script[];
 extern void js_restart(void);
