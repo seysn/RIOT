@@ -56,6 +56,75 @@ I've figured out that sometimes, [gnrc_border_router](../gnrc_border_router) doe
 This undefined behaviour seems to be related about the nodes and/or sub-networks you're choosing.
 I don't know exactly what's the problem, but I am pretty sure it's from their end.
 
+## SensorThings API
+
+
+The object `Observation` is used as a result you send everytime you want to save a value in the database, here's a example :
+
+```
+{
+  "phenomenonTime": "2017-02-07T18:02:00.000Z",
+  "resultTime" : "2017-02-07T18:02:05.000Z",
+  "result" : 137,
+  "Datastream":{"@iot.id":1}
+}
+```
+
+But the SensorThings API Database needs to be initialized before sending data.
+Here are a list of the things you need to initialize with an exemple associated.
+You can find more details on [the documentation](https://developers.sensorup.com/docs/).
+
+### Things
+
+```
+{
+  "name": "Compteur de particules",
+  "description": "Capteur de pollution",
+  "encodingType": "application/vnd.geo+json",
+  "location": {
+    "type": "Point",
+    "coordinates": [-114.133, 51.08]
+  }
+}
+```
+
+### ObservedProperty
+
+```
+{
+  "name": "Particules",
+  "description": "Atmospheric particulate matter – also known as particulate matter (PM) or particulates – are microscopic solid or liquid matter suspended in the Earth's atmosphere.",
+  "definition": "http://dbpedia.org/page/Particulates"
+}
+```
+
+### Sensor
+
+```
+{
+  "encodingType": "http://schema.org/description",
+  "metadata": "compteur de particules",
+  "description": "compteur de particules"
+}
+```
+
+### Datastream
+
+```
+{
+  "name": "Particules",
+  "description": "Atmospheric particulate matter – also known as particulate matter (PM) or particulates – are microscopic solid or liquid matter suspended in the Earth's atmosphere.",
+  "observationType": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
+  "unitOfMeasurement": {
+    "name": "Particules",
+    "symbol": "PM"
+  },
+  "Thing":{"@iot.id":1},
+  "ObservedProperty":{"@iot.id":1},
+  "Sensor":{"@iot.id":1}
+}
+```
+
 # Links
 [Previous project](https://github.com/Lydrin/RIOT/tree/anthony/examples/anthony)
 [Old middleware](https://github.com/Lydrin/RIOT/tree/anthony/examples/middleware)
